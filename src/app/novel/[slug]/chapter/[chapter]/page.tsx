@@ -19,12 +19,13 @@ async function getChapter(novelId: string, num: number): Promise<Chapter | null>
 }
 
 export default async function ChapterPage({
-  params
+  params,
 }: {
-  params: { slug: string; chapter: string }
+  params: Promise<{ slug: string; chapter: string }>
 }) {
-  const chapterNum = parseInt(params.chapter)
-  const novel = await getNovel(params.slug)
+  const { slug, chapter: chapterStr } = await params
+  const chapterNum = parseInt(chapterStr)
+  const novel = await getNovel(slug)
   if (!novel) notFound()
 
   const chapter = await getChapter(novel.id, chapterNum)

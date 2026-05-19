@@ -20,8 +20,13 @@ async function getChapters(novelId: string): Promise<Chapter[]> {
   return snap.docs.map(d => ({ id: d.id, ...d.data() } as Chapter))
 }
 
-export default async function NovelPage({ params }: { params: { slug: string } }) {
-  const novel = await getNovel(params.slug)
+export default async function NovelPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const novel = await getNovel(slug)
   if (!novel) notFound()
   const chapters = await getChapters(novel.id)
 

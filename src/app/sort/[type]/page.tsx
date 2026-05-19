@@ -31,9 +31,14 @@ async function getNovels(type: string): Promise<Novel[]> {
   } catch { return [] }
 }
 
-export default async function SortPage({ params }: { params: { type: string } }) {
-  const novels = await getNovels(params.type)
-  const label = SORT_LABELS[params.type] || 'Novels'
+export default async function SortPage({
+  params,
+}: {
+  params: Promise<{ type: string }>
+}) {
+  const { type } = await params
+  const novels = await getNovels(type)
+  const label = SORT_LABELS[type] || 'Novels'
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: 16 }}>
